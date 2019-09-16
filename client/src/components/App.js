@@ -8,25 +8,25 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      serverResponse: null
+      messages: 'Welcome to WeCode!\n'
     };
   }
 
-  callServer() {
-    fetch(`${serverURL}/`)
+  checkServerConnection() {
+    fetch(`${serverURL}/check`)
       .then(res => res.text())
-      .then(text => this.setState({ serverResponse: text }))
+      .then(text => this.setState({ messages: this.state.messages + text + '\n' }))
       .catch(err => err);
   }
 
   componentDidMount() {
-    this.callServer();
+    this.checkServerConnection();
   }
 
   render() {
     return (
       <Layout
-        serverMessage={this.state.serverResponse}
+        messages={this.state.messages}
       />
     );
   }

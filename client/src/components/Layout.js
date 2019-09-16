@@ -1,39 +1,27 @@
 import React, { Component } from 'react';
 import './Layout.css';
 
+import ChatWindow from './ChatWindow';
 import CodeEditor from './CodeEditor';
-
-class LeftColumn extends Component {
-  render() {
-    return (
-      <div className='LeftColumn'>
-        {this.props.children}
-      </div>
-    );
-  }
-}
-
-class RightColumn extends Component {
-  render() {
-    return (
-      <div className='RightColumn'>
-        {this.props.children}
-      </div>
-    );
-  }
-}
+import Console from './Console';
+import InfoBar from './InfoBar';
 
 class Layout extends Component {
   render() {
     return (
       <div className='Layout'>
-        <LeftColumn>
+        <div className='TopArea'>
+          <InfoBar />
+        </div>
+        <div className='LeftArea'>
           <CodeEditor mode='javascript' />
-        </LeftColumn>
-        <RightColumn>
-          <p>Hello World from client!</p>
-          <p>{this.props.serverMessage}</p>
-        </RightColumn>
+        </div>
+        <div className='RightTop'>
+          <ChatWindow />
+        </div>
+        <div className='RightBottom'>
+          <Console messages={this.props.messages} />
+        </div>
       </div>
     );
   }

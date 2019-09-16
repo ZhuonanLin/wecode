@@ -2,13 +2,25 @@
   min-height: 100vh;
   display: grid;
   grid-template-columns: auto auto;
-  grid-template-areas: "left right";
+  grid-template-rows: auto 1fr 1fr;
+  grid-template-areas:
+    "top top"
+    "left right-top"
+    "left right-bottom";
 }
 
-.LeftColumn {
+.TopArea {
+  grid-area: top;
+}
+
+.LeftArea {
   grid-area: left;
 }
 
-.RightColumn {
-  grid-area: right;
+.RightTopArea {
+  grid-area: right-top;
+}
+
+.RightBottomArea {
+  grid-area: right-bottom;
 }

@@ -1,0 +1,10 @@
+.Console {
+  margin: 0;
+  padding: 0;
+  border-width: 1px;
+  height: calc(100% - 2px);
+  width: calc(100% - 2px);
+  outline: none;
+  overflow: auto;
+  resize: none;
+}

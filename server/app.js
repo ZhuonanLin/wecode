@@ -10,8 +10,6 @@ app.listen(port, () => {
   console.log(`App listening on port ${port}!`)
 })
 
-app.get('/', (req, res) => {
-  setTimeout(() => {
-    res.send('Hello World from server!')
-  }, 1000)
+app.get('/check', (req, res) => {
+  res.send(`Server is connected on port ${port}.`)
 })
