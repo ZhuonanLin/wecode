@@ -1,0 +1,14 @@
+.Layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-areas: "left right";
+}
+
+.LeftColumn {
+  grid-area: left;
+}
+
+.RightColumn {
+  grid-area: right;
+}

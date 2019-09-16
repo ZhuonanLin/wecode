@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import './App.css';
+
+import Layout from './Layout';
 
 const serverURL = 'http://localhost:3001'
 
@@ -24,10 +25,9 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <p>Hello World from client!</p>
-        <p>{this.state.serverResponse}</p>
-      </div>
+      <Layout
+        serverMessage={this.state.serverResponse}
+      />
     );
   }
 }
