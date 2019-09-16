@@ -1,6 +1,7 @@
 .Console {
-  margin: 0;
   padding: 0;
+  border-style: solid;
+  border-color: black;
   border-width: 1px;
   height: calc(100% - 2px);
   width: calc(100% - 2px);
