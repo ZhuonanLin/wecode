@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 import Layout from './Layout';
 
 const serverURL = 'http://localhost:3001'
-const socket = io(serverURL)
+export const socket = io(serverURL)
 
 class App extends Component {
   constructor(props) {
@@ -25,6 +25,10 @@ class App extends Component {
       .catch(err => err);
 
     socket.on('server message', msg => {
+      this.appendMessage(msg);
+    });
+
+    socket.on('run out', msg => {
       this.appendMessage(msg);
     });
   }
