@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import { Button } from 'reactstrap';
+import { Redirect } from 'react-router-dom';
 import io from 'socket.io-client';
-
-import Layout from './Layout';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const serverURL = 'http://localhost:3001'
 export const socket = io(serverURL)
@@ -10,7 +11,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      messages: 'Welcome to WeCode!\n'
+      messages: 'Welcome to WeCode!\n',
+      redirect: false
     };
   }
 
@@ -37,11 +39,27 @@ class App extends Component {
     this.checkServerConnection();
   }
 
+  setRedirect = () => {
+    this.setState({
+      redirect: true
+    })
+  }
+
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect push to='/interview' />
+    }
+  }
+
   render() {
     return (
-      <Layout
-        messages={this.state.messages}
-      />
+      <div>
+        {this.renderRedirect()}
+        <Button color='primary' onClick={this.setRedirect}>
+          Start a New Interview
+        </Button>
+      </div>
+
     );
   }
 }
