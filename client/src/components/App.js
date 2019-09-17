@@ -4,8 +4,7 @@ import { Redirect } from 'react-router-dom';
 import io from 'socket.io-client';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const serverURL = 'http://localhost:3001'
-export const socket = io(serverURL)
+export const socket = io()
 
 class App extends Component {
   constructor(props) {
@@ -21,7 +20,7 @@ class App extends Component {
   }
 
   checkServerConnection() {
-    fetch(`${serverURL}/check`)
+    fetch('/api/check')
       .then(res => res.text())
       .then(text => this.appendMessage(text))
       .catch(err => err);
