@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {Controlled as CodeMirror} from 'react-codemirror2';
 
+import { socket } from './App'
+
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import './CodeEditor.css'
@@ -17,21 +19,27 @@ class CodeEditor extends Component {
 
   render() {
     return (
-      <CodeMirror
-        className='CodeEditor'
-        value={this.state.value}
-        options={{
-          mode: this.props.mode,
-          theme: 'material',
-          lineNumbers: true
-        }}
-        onBeforeChange={(editor, data, value) => {
-          this.setState({value});
-        }}
-        onChange={(editor, data, value) => {
-          console.log('controlled', {value});
-        }}
-      />
+      <div className='CodeEditor'>
+        <CodeMirror
+          value={this.state.value}
+          options={{
+            mode: this.props.mode,
+            theme: 'material',
+            lineNumbers: true
+          }}
+          onBeforeChange={(editor, data, value) => {
+            this.setState({value});
+          }}
+          onChange={(editor, data, value) => {
+            console.log('controlled', {value});
+          }}
+        />
+        <button onClick={() => {
+          socket.emit('run request', this.state.value);
+        }}>
+          Run
+        </button>
+      </div>
     );
   }
 }
