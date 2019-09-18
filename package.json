@@ -6,7 +6,8 @@
     "client": "npm start --prefix=client",
     "server": "npm start --prefix=server",
     "start": "concurrently \"npm run client\" \"npm run server\"",
-    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
+    "heroku-test": "cd server && NODE_ENV=production npm start"
   },
   "dependencies": {
     "concurrently": "^4.1.2"
