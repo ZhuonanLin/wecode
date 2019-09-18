@@ -28,23 +28,23 @@ const code_default = `console.log('Hello World!');`;
 let code_cache = code_default;
 
 io.on('connection', (socket) => {
-  socket.broadcast.emit('server message', 'a user connected');
+  io.emit('server message', `user ${socket.id} connected`);
 
   socket.on('run request', text => {
-    socket.emit('console output', '\ncode submitted\n');
+    io.emit('server message', `code submitted by ${socket.id}`);
     const proc = code_runner.run_javascript(text);
-    socket.emit('console output', 'process started\n');
+    io.emit('server message', 'process started');
 
     proc.stdout.on('data', (data) => {
-      socket.emit('console output', data.toString());
+      io.emit('console output', data.toString());
     });
 
     proc.stderr.on('data', (data)=> {
-      socket.emit('console output', data.toString());
+      io.emit('console output', data.toString());
     });
 
     proc.on('close', (code) => {
-      socket.emit('console output', `process exited with ${code}\n\n`);
+      io.emit('server message', `process exited with ${code}`);
     });
   });
 
@@ -52,9 +52,10 @@ io.on('connection', (socket) => {
     socket.emit('edit', code_cache);
   });
 
-  socket.on('request code default', () => {
+  socket.on('clear', () => {
     code_cache = code_default;
     io.emit('edit', code_cache);
+    io.emit('server message', `code cleared by ${socket.id}`);
   });
 
   socket.on('edit', code => {

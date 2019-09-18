@@ -19,7 +19,7 @@ class CodeEditor extends Component {
   }
 
   clear = () => {
-    socket.emit('request code default');
+    socket.emit('clear');
   };
 
   componentDidMount() {
@@ -51,7 +51,7 @@ class CodeEditor extends Component {
           />
         </div>
         <div className="ButtonArea d-flex flex-row justify-content-end">
-          <Button className="mr-1" color="danger" onClick={this.clear}>clear</Button>
+          <Button className="mr-1" color="danger" onClick={this.clear}>Clear</Button>
           <Button color="primary" onClick={() => {
             socket.emit('run request', this.state.value);
           }}>
