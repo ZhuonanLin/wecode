@@ -16,30 +16,30 @@ class Layout extends Component {
       messages: 'Welcome to WeCode!\n',
     };
   }
-  
+
   appendMessage(newMessage) {
-    this.setState({ messages: this.state.messages + newMessage + '\n'});
+    this.setState({ messages: this.state.messages + newMessage});
   }
 
   checkServerConnection() {
     fetch('/api/check')
       .then(res => res.text())
-      .then(text => this.appendMessage(text))
+      .then(text => this.appendMessage(text + '\n'))
       .catch(err => err);
-
-    socket.on('server message', msg => {
-      this.appendMessage(msg);
-    });
-
-    socket.on('run out', msg => {
-      this.appendMessage(msg);
-    });
   }
 
   componentDidMount() {
     this.checkServerConnection();
+
+    socket.on('server message', msg => {
+      this.appendMessage(`Server: ${msg}\n`);
+    });
+
+    socket.on('console output', msg => {
+      this.appendMessage(`${msg}`);
+    });
   }
-  
+
   render() {
     return (
       <div className='Layout'>
