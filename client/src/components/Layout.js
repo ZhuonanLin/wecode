@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './Layout.css';
 import io from 'socket.io-client';
 
-import ChatWindow from './ChatWindow';
 import CodeEditor from './CodeEditor';
 import Console from './Console';
 import InfoBar from './InfoBar';
@@ -51,10 +50,7 @@ class Layout extends Component {
         <div className='LeftArea'>
           <CodeEditor mode='javascript' />
         </div>
-        <div className='RightTop'>
-          <ChatWindow />
-        </div>
-        <div className='RightBottom'>
+        <div className='RightArea'>
           <Console messages={this.state.messages} />
         </div>
       </div>
