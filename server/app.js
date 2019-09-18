@@ -24,6 +24,9 @@ app.get('/api/check', (req, res) => {
   res.send(`Server is connected on port ${port}.`)
 });
 
+const code_default = `console.log('Hello World!');`;
+let code_cache = code_default;
+
 io.on('connection', (socket) => {
   socket.broadcast.emit('server message', 'a user connected');
 
@@ -43,6 +46,20 @@ io.on('connection', (socket) => {
     proc.on('close', (code) => {
       socket.emit('console output', `process exited with ${code}\n\n`);
     });
+  });
+
+  socket.on('request code', () => {
+    socket.emit('edit', code_cache);
+  });
+
+  socket.on('request code default', () => {
+    code_cache = default_code;
+    io.emit('edit', code_cache);
+  });
+
+  socket.on('edit', code => {
+    code_cache = code;
+    socket.broadcast.emit('edit', code_cache);
   });
 
   socket.on('disconnect', () => {

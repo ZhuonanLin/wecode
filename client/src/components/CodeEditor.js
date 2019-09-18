@@ -14,15 +14,21 @@ class CodeEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: "console.log('Hello World!');"
-    }
+      value: ""
+    };
   }
 
   clear = () => {
-    this.setState({ 
-      value: "console.log('Hello World!');" }
-    );
+    socket.emit('request code default');
   };
+
+  componentDidMount() {
+    socket.emit('request code');
+
+    socket.on('edit', value => {
+      this.setState({value});
+    });
+  }
 
   render() {
     return (
@@ -39,7 +45,7 @@ class CodeEditor extends Component {
             this.setState({value});
           }}
           onChange={(editor, data, value) => {
-            console.log('controlled', {value});
+            socket.emit('edit', value);
           }}
         />
         </div>
