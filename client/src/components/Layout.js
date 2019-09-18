@@ -29,7 +29,9 @@ class Layout extends Component {
   }
 
   componentDidMount() {
-    this.checkServerConnection();
+    // This is problematic when client is built and served as static.
+    // I have no idea what the problem is, so comment it out for now.
+    // this.checkServerConnection();
 
     socket.on('server message', msg => {
       this.appendMessage(`Server: ${msg}\n`);
