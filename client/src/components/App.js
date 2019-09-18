@@ -4,8 +4,6 @@ import { Redirect } from 'react-router-dom';
 import io from 'socket.io-client';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export const socket = io()
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -15,28 +13,6 @@ class App extends Component {
     };
   }
 
-  appendMessage(newMessage) {
-    this.setState({ messages: this.state.messages + newMessage + '\n'});
-  }
-
-  checkServerConnection() {
-    fetch('/api/check')
-      .then(res => res.text())
-      .then(text => this.appendMessage(text))
-      .catch(err => err);
-
-    socket.on('server message', msg => {
-      this.appendMessage(msg);
-    });
-
-    socket.on('run out', msg => {
-      this.appendMessage(msg);
-    });
-  }
-
-  componentDidMount() {
-    this.checkServerConnection();
-  }
 
   setRedirect = () => {
     this.setState({
