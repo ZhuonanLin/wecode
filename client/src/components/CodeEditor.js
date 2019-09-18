@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Controlled as CodeMirror} from 'react-codemirror2';
+import { ButtonGroup, Button } from 'reactstrap';
 
 import { socket } from './App'
 
@@ -13,14 +14,21 @@ class CodeEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: `console.log('Hello World!');`
+      value: "console.log('Hello World!');"
     }
   }
 
+  clear = () => {
+    this.setState({ 
+      value: "console.log('Hello World!');" }
+    );
+  };
+
   render() {
     return (
-      <div className='CodeEditor'>
-        <CodeMirror
+      <div className='CodeEditor d-flex flex-column'>
+        <div className="flex-fill">
+          <CodeMirror
           value={this.state.value}
           options={{
             mode: this.props.mode,
@@ -34,11 +42,15 @@ class CodeEditor extends Component {
             console.log('controlled', {value});
           }}
         />
-        <button onClick={() => {
-          socket.emit('run request', this.state.value);
-        }}>
-          Run
-        </button>
+        </div>
+        <div className="d-flex flex-row justify-content-end">
+          <Button className="mr-1" color="danger" onClick={this.clear}>clear</Button>
+          <Button color="primary" onClick={() => {
+            socket.emit('run request', this.state.value);
+          }}>
+            Run
+          </Button>
+        </div>
       </div>
     );
   }
