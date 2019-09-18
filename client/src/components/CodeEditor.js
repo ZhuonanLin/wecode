@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Controlled as CodeMirror} from 'react-codemirror2';
 import { ButtonGroup, Button } from 'reactstrap';
 
-import { socket } from './App'
+import { socket } from './Layout'
 
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
