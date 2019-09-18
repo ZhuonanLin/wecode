@@ -7,8 +7,7 @@ import CodeEditor from './CodeEditor';
 import Console from './Console';
 import InfoBar from './InfoBar';
 
-const serverURL = 'http://localhost:3001'
-export const socket = io(serverURL)
+export const socket = io()
 
 class Layout extends Component {
   constructor(props) {
@@ -23,7 +22,7 @@ class Layout extends Component {
   }
 
   checkServerConnection() {
-    fetch(`${serverURL}/check`)
+    fetch('/api/check')
       .then(res => res.text())
       .then(text => this.appendMessage(text))
       .catch(err => err);
