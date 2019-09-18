@@ -32,24 +32,25 @@ class CodeEditor extends Component {
 
   render() {
     return (
-      <div className='CodeEditor d-flex flex-column'>
-        <div className="flex-fill">
+      <div className='CodeEditor'>
+        <div className='TextArea'>
           <CodeMirror
-          value={this.state.value}
-          options={{
-            mode: this.props.mode,
-            theme: 'material',
-            lineNumbers: true
-          }}
-          onBeforeChange={(editor, data, value) => {
-            this.setState({value});
-          }}
-          onChange={(editor, data, value) => {
-            socket.emit('edit', value);
-          }}
-        />
+            className='FullHeight'
+            value={this.state.value}
+            options={{
+              mode: this.props.mode,
+              theme: 'material',
+              lineNumbers: true
+            }}
+            onBeforeChange={(editor, data, value) => {
+              this.setState({value});
+            }}
+            onChange={(editor, data, value) => {
+              socket.emit('edit', value);
+            }}
+          />
         </div>
-        <div className="d-flex flex-row justify-content-end">
+        <div className="ButtonArea d-flex flex-row justify-content-end">
           <Button className="mr-1" color="danger" onClick={this.clear}>clear</Button>
           <Button color="primary" onClick={() => {
             socket.emit('run request', this.state.value);
