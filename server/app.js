@@ -53,7 +53,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('request code default', () => {
-    code_cache = default_code;
+    code_cache = code_default;
     io.emit('edit', code_cache);
   });
 
