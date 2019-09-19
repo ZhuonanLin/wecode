@@ -14,37 +14,44 @@ class CodeEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: "console.log('Hello World!');"
-    }
+      value: ""
+    };
   }
 
   clear = () => {
-    this.setState({ 
-      value: "console.log('Hello World!');" }
-    );
+    socket.emit('clear');
   };
+
+  componentDidMount() {
+    socket.emit('request code');
+
+    socket.on('edit', value => {
+      this.setState({value});
+    });
+  }
 
   render() {
     return (
-      <div className='CodeEditor d-flex flex-column'>
-        <div className="flex-fill">
+      <div className='CodeEditor'>
+        <div className='TextArea'>
           <CodeMirror
-          value={this.state.value}
-          options={{
-            mode: this.props.mode,
-            theme: 'material',
-            lineNumbers: true
-          }}
-          onBeforeChange={(editor, data, value) => {
-            this.setState({value});
-          }}
-          onChange={(editor, data, value) => {
-            console.log('controlled', {value});
-          }}
-        />
+            className='FullHeight'
+            value={this.state.value}
+            options={{
+              mode: this.props.mode,
+              theme: 'material',
+              lineNumbers: true
+            }}
+            onBeforeChange={(editor, data, value) => {
+              this.setState({value});
+            }}
+            onChange={(editor, data, value) => {
+              socket.emit('edit', value);
+            }}
+          />
         </div>
-        <div className="d-flex flex-row justify-content-end">
-          <Button className="mr-1" color="danger" onClick={this.clear}>clear</Button>
+        <div className="ButtonArea d-flex flex-row justify-content-end">
+          <Button className="mr-1" color="danger" onClick={this.clear}>Clear</Button>
           <Button color="primary" onClick={() => {
             socket.emit('run request', this.state.value);
           }}>

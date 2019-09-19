@@ -1,8 +1,0 @@
-.ChatWindow {
-  border-style: solid;
-  border-color: black;
-  border-width: 1px;
-  border-bottom-width: 0;
-  height: calc(100% - 1px);
-  width: calc(100% - 2px);
-}
