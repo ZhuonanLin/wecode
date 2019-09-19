@@ -3,7 +3,6 @@ import { Button } from 'reactstrap';
 import { Jumbotron, Container } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 
-import footer from './footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Footer from './Footer';
 
