@@ -1,21 +1,28 @@
 import React from 'react';
+import { Alert } from 'reactstrap';
 
 const style = {
   textAlign: "center",
-  padding: "20px",
+  padding: "0px",
   position: "fixed",
   left: "0",
   bottom: "0",
-  height: "60px",
+  height: "8vh",
   width: "100%",
 }
 
 class Footer extends React.Component {
+  message = "Author: Bili Dong \& Zhuonan Lin"
+
   render() {
     return (
         <div>
             <div style={style}>
-                { this.props.children }
+              <Alert color="light" style={{width: "100%"}}>
+                <div style={{ color: "black" }}>
+                  {this.message}
+                </div>
+              </Alert>
             </div>
         </div>
     );
