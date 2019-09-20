@@ -2,10 +2,11 @@
   min-height: 100vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto 1fr 1fr;
   grid-template-areas:
     "top top"
-    "left right";
+    "left right-top"
+    "left right-bottom";
 }
 
 .TopArea {
@@ -16,6 +17,10 @@
   grid-area: left;
 }
 
-.RightArea {
-  grid-area: right;
+.RightTopArea {
+  grid-area: right-top;
+}
+
+.RightBottomArea {
+  grid-area: right-bottom;
 }

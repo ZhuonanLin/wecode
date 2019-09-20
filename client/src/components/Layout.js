@@ -14,8 +14,9 @@ import {
 import CodeEditor from './CodeEditor';
 import Console from './Console';
 import InvitationModal from './InvitationModal';
+import VideoChat from './VideoChat';
 
-export const socket = io()
+export const socket = io();
 
 class Layout extends Component {
   constructor(props) {
@@ -83,7 +84,10 @@ class Layout extends Component {
         <div className='LeftArea'>
           <CodeEditor mode='javascript' />
         </div>
-        <div className='RightArea'>
+        <div className='RightTopArea'>
+          <VideoChat />
+        </div>
+        <div className='RightBottomArea'>
           <Console messages={this.state.messages} />
         </div>
         <div>
