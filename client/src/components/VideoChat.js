@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Peer from 'peerjs';
+import styled from 'styled-components';
 
 import { socket } from './Layout';
 
@@ -9,10 +10,21 @@ export const peer = new Peer({
   path: '/peerjs'
 });
 
-// let videoMe = document.getElementById('video-me');
-// let videoYou = document.getElementById('video-you');
-let streamMe;
-navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+const StyledVideoChat = styled.div`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+`
+
+const Video = styled.video`
+  width: 50%;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+`
 
 class VideoChat extends Component {
   stream = null;
@@ -20,6 +32,8 @@ class VideoChat extends Component {
   componentDidMount() {
     let videoMe = document.getElementById('video-me');
     let videoYou = document.getElementById('video-you');
+
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
     navigator.getUserMedia({video: true, audio: true}, (stream) => {
       videoMe.srcObject = stream;
@@ -54,10 +68,10 @@ class VideoChat extends Component {
 
   render() {
     return (
-      <div>
-        <video id='video-me'></video>
-        <video id='video-you'></video>
-      </div>
+      <StyledVideoChat>
+        <Video id='video-me'></Video>
+        <Video id='video-you'></Video>
+      </StyledVideoChat>
     );
   }
 }

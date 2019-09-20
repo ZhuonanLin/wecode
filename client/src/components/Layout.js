@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './Layout.css';
 import io from 'socket.io-client';
 import {
   Button,
@@ -10,6 +9,7 @@ import {
   Nav,
   NavItem,
 } from 'reactstrap';
+import styled from 'styled-components';
 
 import CodeEditor from './CodeEditor';
 import Console from './Console';
@@ -17,6 +17,34 @@ import InvitationModal from './InvitationModal';
 import VideoChat from './VideoChat';
 
 export const socket = io();
+
+const StyledLayout = styled.div`
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 3.5rem 1fr 1fr;
+  grid-template-areas:
+    "top top"
+    "left right-top"
+    "left right-bottom";
+`
+
+const Top = styled.div`
+  grid-area: top;
+`
+
+const Left = styled.div`
+  grid-area: left;
+`
+
+const RightTop = styled.div`
+  grid-area: right-top;
+`
+
+const RightBottom = styled.div`
+  grid-area: right-bottom;
+`
 
 class Layout extends Component {
   constructor(props) {
@@ -67,8 +95,8 @@ class Layout extends Component {
   render() {
     console.log(this.state.isOpen);
     return (
-      <div className='Layout'>
-        <div className='TopArea'>
+      <StyledLayout>
+        <Top>
           <Navbar color="light" light expand="md">
             <NavbarBrand href="/">WeCode</NavbarBrand>
             <NavbarToggler onClick={this.toggle} />
@@ -80,23 +108,23 @@ class Layout extends Component {
               </Nav>
             </Collapse>
           </Navbar>
-        </div>
-        <div className='LeftArea'>
+        </Top>
+        <Left>
           <CodeEditor mode='javascript' />
-        </div>
-        <div className='RightTopArea'>
+        </Left>
+        <RightTop>
           <VideoChat />
-        </div>
-        <div className='RightBottomArea'>
+        </RightTop>
+        <RightBottom>
           <Console messages={this.state.messages} />
-        </div>
+        </RightBottom>
         <div>
-        <InvitationModal show={this.state.isOpen}
-          onClose={this.closeModal}
-          word="Send Interview Invitation" 
-        />
+          <InvitationModal show={this.state.isOpen}
+            onClose={this.closeModal}
+            word="Send Interview Invitation"
+          />
         </div>
-      </div>
+      </StyledLayout>
     );
   }
 }
