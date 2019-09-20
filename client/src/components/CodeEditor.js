@@ -3,7 +3,7 @@ import {Controlled as CodeMirror} from 'react-codemirror2';
 import { Button } from 'reactstrap';
 import styled from 'styled-components';
 
-import { socket } from './Layout'
+import { socket } from './App';
 
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';

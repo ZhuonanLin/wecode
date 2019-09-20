@@ -7,6 +7,16 @@ import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Footer from './Footer';
 
+// Set up all the connections
+import io from 'socket.io-client';
+import Peer from 'peerjs';
+export const socket = io();
+export const peer = new Peer({
+  host: 'localhost',
+  port: process.env.PORT || 3001,
+  path: '/peerjs'
+});
+
 const StyledJumbotron = styled(Jumbotron)`
   height: 100vh;
   width: 100vw;
@@ -46,7 +56,7 @@ class App extends Component {
             Welcome to WeCode
           </div>
           <div>
-          {this.renderRedirect()}
+            {this.renderRedirect()}
             <Button color='primary' onClick={this.setRedirect}>
               Start a New Interview
             </Button>

@@ -1,15 +1,7 @@
 import React, { Component } from 'react';
-import Peer from 'peerjs';
 import styled from 'styled-components';
 
-import { socket } from './Layout';
-
-export const peer = new Peer({
-  host: 'localhost',
-  port: process.env.PORT || 3001,
-  path: '/peerjs'
-});
-
+import { socket, peer } from './App';
 
 const StyledVideoChat = styled.div`
   height: 100%;
@@ -26,14 +18,16 @@ const Video = styled.video`
   border-width: 1px;
 `
 
+navigator.getUserMedia = navigator.getUserMedia ||
+                         navigator.webkitGetUserMedia ||
+                         navigator.mozGetUserMedia;
+
 class VideoChat extends Component {
   stream = null;
 
   componentDidMount() {
     let videoMe = document.getElementById('video-me');
     let videoYou = document.getElementById('video-you');
-
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
     navigator.getUserMedia({video: true, audio: true}, (stream) => {
       videoMe.srcObject = stream;
@@ -42,12 +36,12 @@ class VideoChat extends Component {
     });
 
     peer.on('open', (peer_id)=> {
-      socket.emit('peer', peer_id);
+      socket.emit('peer open', peer_id);
     });
 
+    // Answer call
     peer.on('call', (call) => {
       call.answer(this.stream);
-      this.peer_connections.add(call);
 
       call.on('stream', (stream) => {
         videoYou.srcObject = stream;
@@ -55,9 +49,9 @@ class VideoChat extends Component {
       });
     });
 
-    socket.on('call', (peer_id) => {
+    // Make call
+    socket.on('peer call', (peer_id) => {
       let call = peer.call(peer_id, this.stream);
-      this.peer_connections.add(call);
 
       call.on('stream', (stream) => {
         videoYou.srcObject = stream;

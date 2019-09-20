@@ -29,6 +29,7 @@ app.get('/api/check', (req, res) => {
 
 const code_default = `console.log('Hello World!');`;
 let code_cache = code_default;
+let connected_peers = new Set();
 
 io.on('connection', (socket) => {
   io.emit('server message', `socket ${socket.id} connected`);
@@ -66,25 +67,23 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('edit', code_cache);
   });
 
-  socket.on('peer', peer_id => {
-    socket.broadcast.emit('call', peer_id);
-  })
+  socket.on('peer open', peer_id => {
+    socket.broadcast.emit('peer call', peer_id);
+  });
 
   socket.on('disconnect', () => {
     socket.broadcast.emit('server message', `socket ${socket.id} disconnected`);
   });
 });
 
-let connected_peers = new Set();
-
-peerserver.on('connection', (id) => {
-  connected_peers.add(id);
-  io.emit('server message', `peer ${id} connected`);
+peerserver.on('connection', peer_id => {
+  connected_peers.add(peer_id);
+  io.emit('server message', `peer ${peer_id} connected`);
 });
 
-peerserver.on('disconnect', (id) => {
-  connected_peers.delete(id);
-  io.emit('server message', `peer ${id} disconnected`);
+peerserver.on('disconnect', peer_id => {
+  connected_peers.delete(peer_id);
+  io.emit('server message', `peer ${peer_id} disconnected`);
 });
 
 server.listen(port, () => {

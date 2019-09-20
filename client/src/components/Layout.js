@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import io from 'socket.io-client';
 import {
   Button,
   Collapse,
@@ -11,12 +10,12 @@ import {
 } from 'reactstrap';
 import styled from 'styled-components';
 
+import { socket } from './App';
+
 import CodeEditor from './CodeEditor';
 import Console from './Console';
 import InvitationModal from './InvitationModal';
 import VideoChat from './VideoChat';
-
-export const socket = io();
 
 const StyledLayout = styled.div`
   height: 100vh;
