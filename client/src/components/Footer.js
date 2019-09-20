@@ -12,7 +12,7 @@ const style = {
 }
 
 class Footer extends React.Component {
-  message = "Author: Bili Dong \& Zhuonan Lin"
+  message = "Author: Bili Dong & Zhuonan Lin"
 
   render() {
     return (

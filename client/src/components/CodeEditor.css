@@ -1,26 +1,4 @@
-.CodeEditor {
-  height: 100%;
-  width: 100%;
-  display: grid;
-  grid-template-rows: 1fr auto;
-  grid-template-areas:
-    "text"
-    "button";
-}
-
-.TextArea {
-  grid-area: text;
-}
-
-.ButtonArea {
-  grid-area: button;
-}
-
-.FullHeight {
-  height: 100%;
-}
-
 .CodeMirror {
-  height: 100%;
-  width: 100%;
+  height: calc(100vh - 6rem);
+  max-height: 100%;
 }

@@ -1,14 +1,17 @@
 const express = require('express');
 const path = require('path');
+const ExpressPeerServer = require('peer').ExpressPeerServer;
 
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
+const peerserver = ExpressPeerServer(server, {});
 const port = process.env.PORT || 3001;
 
 const code_runner = require('./code_runnner');
 
 app.use(require('cors')());
+app.use('/peerjs', peerserver);
 
 if (process.env.NODE_ENV === 'production') {
   // Serve any static files
@@ -26,9 +29,10 @@ app.get('/api/check', (req, res) => {
 
 const code_default = `console.log('Hello World!');`;
 let code_cache = code_default;
+let connected_peers = new Set();
 
 io.on('connection', (socket) => {
-  io.emit('server message', `user ${socket.id} connected`);
+  io.emit('server message', `socket ${socket.id} connected`);
 
   socket.on('run request', text => {
     io.emit('server message', `code submitted by ${socket.id}`);
@@ -63,9 +67,23 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('edit', code_cache);
   });
 
-  socket.on('disconnect', () => {
-    socket.broadcast.emit('server message', 'a user disconnected');
+  socket.on('peer open', peer_id => {
+    socket.broadcast.emit('peer call', peer_id);
   });
+
+  socket.on('disconnect', () => {
+    socket.broadcast.emit('server message', `socket ${socket.id} disconnected`);
+  });
+});
+
+peerserver.on('connection', peer_id => {
+  connected_peers.add(peer_id);
+  io.emit('server message', `peer ${peer_id} connected`);
+});
+
+peerserver.on('disconnect', peer_id => {
+  connected_peers.delete(peer_id);
+  io.emit('server message', `peer ${peer_id} disconnected`);
 });
 
 server.listen(port, () => {

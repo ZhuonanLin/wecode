@@ -23,7 +23,7 @@ class InvitationModal extends React.Component {
       margin: '0 auto',
       padding: 30
     };
-  
+
   render() {
     return (
     <div>
