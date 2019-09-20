@@ -100,7 +100,6 @@ class Layout extends Component {
   }
 
   render() {
-    console.log(this.state.isOpen);
     return (
       <StyledLayout>
         <Top>

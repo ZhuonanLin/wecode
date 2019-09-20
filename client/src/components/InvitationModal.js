@@ -41,7 +41,7 @@ class InvitationModal extends React.Component {
           </Modal.Body>
 
           <Modal.Footer>
-            <Button variant="primary">Save changes</Button>
+            <Button variant="primary">Send Invitaion</Button>
             <Button onClick={this.props.onClose} variant="secondary">Cancel</Button>
           </Modal.Footer>
         </Modal.Dialog>
