@@ -18,10 +18,6 @@ const Video = styled.video`
   border-width: 1px;
 `
 
-navigator.getUserMedia = navigator.getUserMedia ||
-                         navigator.webkitGetUserMedia ||
-                         navigator.mozGetUserMedia;
-
 class VideoChat extends Component {
   stream = null;
 
@@ -29,11 +25,12 @@ class VideoChat extends Component {
     let videoMe = document.getElementById('video-me');
     let videoYou = document.getElementById('video-you');
 
-    navigator.getUserMedia({video: true, audio: true}, (stream) => {
-      videoMe.srcObject = stream;
-      videoMe.play();
-      this.stream = stream;
-    });
+    navigator.mediaDevices.getUserMedia({video: true, audio: true})
+      .then((stream) => {
+        videoMe.srcObject = stream;
+        videoMe.play();
+        this.stream = stream;
+      });
 
     peer.on('open', (peer_id)=> {
       socket.emit('peer open', peer_id);
