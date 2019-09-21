@@ -1,4 +1,5 @@
 const express = require('express');
+const proxy = require('http-proxy-middleware');
 const bodyParser = require('body-parser');
 const path = require('path');
 const ExpressPeerServer = require('peer').ExpressPeerServer;
@@ -35,7 +36,7 @@ app.post('/send-invitation-email', (req, res, next) => {
 <a href="http://demo-wecode.herokuapp.com/interview"> Join the Interivew on WeCode </a>
 <p> Regards, <br> WeCode Team - Zhuonan Lin & Bili Dong </p>
 `
-  
+
   const mailOptions = {
     to: email,
     from: 'WeCode',
@@ -53,18 +54,8 @@ app.post('/send-invitation-email', (req, res, next) => {
   next();
 });
 
-if (process.env.NODE_ENV === 'production') {
-  // Serve any static files
-  app.use(express.static(path.join(__dirname, '../client/build')));
-
-  // Handle React routing, return all requests to React app
-  app.get('*', function(req, res) {
-    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
-  });
-}
-
 app.get('/api/check', (req, res) => {
-  res.send(`Server is connected on port ${port}.`)
+  res.send(`Server is connected on port ${port}.`);
 });
 
 const code_default = 
@@ -135,3 +126,19 @@ server.listen(port, () => {
   console.log(`Server listening on port ${port}!`)
 });
 
+if (process.env.NODE_ENV === 'production') {
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, '../client/build')));
+
+  // Handle React routing, return all requests to React app
+  app.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+  });
+
+  // Set up proxy
+  app.use(proxy({
+    target: `http://localhost:${port}`,
+    changeOrigin: true,
+    ws: true,
+  }));
+}
