@@ -1,4 +1,5 @@
 const express = require('express');
+const proxy = require('http-proxy-middleware');
 const bodyParser = require('body-parser');
 const path = require('path');
 const ExpressPeerServer = require('peer').ExpressPeerServer;
@@ -6,7 +7,7 @@ const ExpressPeerServer = require('peer').ExpressPeerServer;
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
-const peerserver = ExpressPeerServer(server, {});
+const peerserver = ExpressPeerServer(server, { debug: true });
 const port = process.env.PORT || 3001;
 
 const code_runner = require('./code_runnner');
@@ -16,7 +17,7 @@ const nodemailer = require('nodemailer');
 const sendgridTransport = require('nodemailer-sendgrid-transport');
 const transporter = nodemailer.createTransport(sendgridTransport({
   auth: {
-    api_key: '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'
+    api_key: process.env.SENDGRID_KEY
   }
 }));
 
@@ -35,7 +36,7 @@ app.post('/send-invitation-email', (req, res, next) => {
 <a href="http://demo-wecode.herokuapp.com/interview"> Join the Interivew on WeCode </a>
 <p> Regards, <br> WeCode Team - Zhuonan Lin & Bili Dong </p>
 `
-  
+
   const mailOptions = {
     to: email,
     from: 'WeCode',
@@ -53,18 +54,8 @@ app.post('/send-invitation-email', (req, res, next) => {
   next();
 });
 
-if (process.env.NODE_ENV === 'production') {
-  // Serve any static files
-  app.use(express.static(path.join(__dirname, '../client/build')));
-
-  // Handle React routing, return all requests to React app
-  app.get('*', function(req, res) {
-    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
-  });
-}
-
 app.get('/api/check', (req, res) => {
-  res.send(`Server is connected on port ${port}.`)
+  res.send(`Server is connected on port ${port}.`);
 });
 
 const code_default = 
@@ -78,10 +69,14 @@ let connected_peers = new Set();
 io.on('connection', (socket) => {
   io.emit('server message', `socket ${socket.id} connected`);
 
+  socket.on('chat window ready', () => {
+    socket.emit('peer create', port);
+  });
+
   socket.on('run request', (language, text) => {
     io.emit('server message', `code submitted by ${socket.id}`);
     const proc = code_runner.run_code(language, text);
-    
+
     io.emit('server message', 'process started');
 
     proc.stdout.on('data', (data) => {
@@ -135,3 +130,24 @@ server.listen(port, () => {
   console.log(`Server listening on port ${port}!`)
 });
 
+if (process.env.NODE_ENV === 'production') {
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, '../client/build')));
+
+  // Handle React routing, return all requests to React app
+  app.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+  });
+
+  // Set up proxy
+  app.use(proxy('/peerjs', {
+    target: `http://localhost:${port}`,
+    changeOrigin: true,
+    ws: true,
+  }));
+  app.use(proxy({
+    target: `http://localhost:${port}`,
+    changeOrigin: true,
+    ws: true,
+  }));
+}

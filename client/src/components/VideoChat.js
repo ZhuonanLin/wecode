@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import Peer from 'peerjs';
 
-import { socket, peer } from './App';
+import { socket } from './App';
 
 const StyledVideoChat = styled.div`
   height: 100%;
@@ -32,29 +33,38 @@ class VideoChat extends Component {
         this.stream = stream;
       });
 
-    console.log('WebRTC peer: ', peer);
+    socket.emit('chat window ready');
 
-    peer.on('open', (peer_id)=> {
-      socket.emit('peer open', peer_id);
-    });
-
-    // Answer call
-    peer.on('call', (call) => {
-      call.answer(this.stream);
-
-      call.on('stream', (stream) => {
-        videoYou.srcObject = stream;
-        videoYou.play();
+    socket.on('peer create', (port) => {
+      const peer = new Peer({
+        host: 'localhost',
+        port: port,
+        path: '/peerjs'
       });
-    });
+      console.log('WebRTC peer: ', peer);
 
-    // Make call
-    socket.on('peer call', (peer_id) => {
-      let call = peer.call(peer_id, this.stream);
+      peer.on('open', (peer_id)=> {
+        socket.emit('peer open', peer_id);
+      });
 
-      call.on('stream', (stream) => {
-        videoYou.srcObject = stream;
-        videoYou.play();
+      // Answer call
+      peer.on('call', (call) => {
+        call.answer(this.stream);
+
+        call.on('stream', (stream) => {
+          videoYou.srcObject = stream;
+          videoYou.play();
+        });
+      });
+
+      // Make call
+      socket.on('peer call', (peer_id) => {
+        let call = peer.call(peer_id, this.stream);
+
+        call.on('stream', (stream) => {
+          videoYou.srcObject = stream;
+          videoYou.play();
+        });
       });
     });
   }
@@ -62,7 +72,7 @@ class VideoChat extends Component {
   render() {
     return (
       <StyledVideoChat>
-        <Video id='video-me'></Video>
+        <Video id='video-me' muted></Video>
         <Video id='video-you'></Video>
       </StyledVideoChat>
     );
