@@ -45,13 +45,27 @@ const RightBottom = styled.div`
   grid-area: right-bottom;
 `
 
+const VideoChatPlaceholder = styled.div`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+`
+const VideoWindowPlaceholder = styled.div`
+  width: 50%;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+`
+
 class Layout extends Component {
   constructor(props) {
     super(props);
     this.state = {
       messages: 'Welcome to WeCode!\n',
       isOpen: false,
-      isVedioChatOpen: false
+      isVideoChatOpen: false
     };
   }
 
@@ -92,15 +106,14 @@ class Layout extends Component {
     });
   }
 
-  toggleVedioChat = () => {
+  toggleVideoChat = () => {
     this.setState({
-      isVedioChatOpen: 
-        !this.state.isVedioChatOpen
+      isVideoChatOpen: 
+        !this.state.isVideoChatOpen
     });
   }
 
   render() {
-    console.log(this.state.isOpen);
     return (
       <StyledLayout>
         <Top>
@@ -110,10 +123,10 @@ class Layout extends Component {
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" navbar>
                 <NavItem>
-                  {this.state.isVedioChatOpen ? (
-                    <Button onClick={this.toggleVedioChat} color="danger">End Video Chat</Button>
+                  {this.state.isVideoChatOpen ? (
+                    <Button onClick={this.toggleVideoChat} color="danger">End Video Chat</Button>
                   ) : (
-                    <Button onClick={this.toggleVedioChat} color="warning">Begin Video Chat</Button>
+                    <Button onClick={this.toggleVideoChat} color="warning">Begin Video Chat</Button>
                   )}
                 </NavItem>
                 <NavItem className="ml-3">
@@ -127,10 +140,13 @@ class Layout extends Component {
           <CodeEditor mode='javascript' />
         </Left>
         <RightTop>
-            {this.state.isVedioChatOpen ? (
+            {this.state.isVideoChatOpen ? (
               <VideoChat />
             ) : (
-              null
+              <VideoChatPlaceholder>
+                <VideoWindowPlaceholder></VideoWindowPlaceholder>
+                <VideoWindowPlaceholder></VideoWindowPlaceholder>
+              </VideoChatPlaceholder>
             )}
         </RightTop>
         <RightBottom>

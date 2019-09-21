@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const path = require('path');
 const ExpressPeerServer = require('peer').ExpressPeerServer;
 
@@ -10,8 +11,47 @@ const port = process.env.PORT || 3001;
 
 const code_runner = require('./code_runnner');
 
+// set up email
+const nodemailer = require('nodemailer');
+const sendgridTransport = require('nodemailer-sendgrid-transport');
+const transporter = nodemailer.createTransport(sendgridTransport({
+  auth: {
+    api_key: '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'
+  }
+}));
+
 app.use(require('cors')());
 app.use('/peerjs', peerserver);
+
+// For sending Email
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.post('/send-invitation-email', (req, res, next) => {
+  const { interviewerName, email } = req.body;
+
+
+  const invitationBody = `<p> Hi, </p> <p><i>${interviewerName}</i> is sending an interview invitation through<b> WeCode </b>! </p>
+<p> Click the click below to join the interview: </p> <br>
+<a href="http://demo-wecode.herokuapp.com/interview"> Join the Interivew on WeCode </a>
+<p> Regards, <br> WeCode Team - Zhuonan Lin & Bili Dong </p>
+`
+  
+  const mailOptions = {
+    to: email,
+    from: 'WeCode',
+    subject: 'Interview Invitation From WeCode',
+    html: invitationBody
+  };
+  transporter.sendMail(mailOptions, (error, into) => {
+      if (error) {
+        return console.log(error);
+      }
+      console.log('Message %s sent: %s', info.messageId, info.response);
+    }
+  );
+  res.redirect('/interview');
+  next();
+});
 
 if (process.env.NODE_ENV === 'production') {
   // Serve any static files
@@ -89,3 +129,4 @@ peerserver.on('disconnect', peer_id => {
 server.listen(port, () => {
   console.log(`Server listening on port ${port}!`)
 });
+

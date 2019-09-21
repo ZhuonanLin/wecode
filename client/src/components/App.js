@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'reactstrap';
+import { Button, ButtonGroup } from 'reactstrap';
 import { Jumbotron } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
@@ -56,10 +56,15 @@ class App extends Component {
             Welcome to WeCode
           </div>
           <div>
-            {this.renderRedirect()}
-            <Button color='primary' onClick={this.setRedirect}>
-              Start a New Interview
-            </Button>
+          {this.renderRedirect()}
+            <ButtonGroup>
+              {/* <Button color='danger'>
+                Log In or Sign up
+              </Button> */}
+              <Button color='primary' onClick={this.setRedirect} className='ml-4'>
+                Start an Interview as Guest
+              </Button>
+            </ButtonGroup>
           </div>
           <Footer />
         </StyledJumbotron>

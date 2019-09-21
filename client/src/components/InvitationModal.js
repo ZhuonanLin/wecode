@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
+import { Button, Form, Label, Input } from 'reactstrap';
 
 class InvitationModal extends React.Component {
     // The gray background
@@ -23,7 +24,7 @@ class InvitationModal extends React.Component {
       margin: '0 auto',
       padding: 30
     };
-
+  
   render() {
     return (
     <div>
@@ -36,14 +37,18 @@ class InvitationModal extends React.Component {
             <Modal.Title>Send Interview Invitaion</Modal.Title>
           </Modal.Header>
 
-          <Modal.Body>
-            <p>Modal body text goes here.</p>
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button variant="primary">Save changes</Button>
-            <Button onClick={this.props.onClose} variant="secondary">Cancel</Button>
-          </Modal.Footer>
+          <Form action="/send-invitation-email" method="post">
+              <Modal.Body>
+                <Label for="interviewername">Your name:</Label>
+                <Input type="text" name="interviewerName" placeholder="Enter your name"></Input>
+                <Label for="exampleEmail">Send invitation to (email):</Label>
+                <Input type="email" name="email" placeholder="Send invitation the email address" />
+              </Modal.Body>
+              <Modal.Footer>
+                <Button color="primary" type="submit">Send Invitaion</Button>
+                <Button onClick={this.props.onClose} color="danger">Cancel</Button>
+              </Modal.Footer>
+          </Form>
         </Modal.Dialog>
         </div>
       )}
