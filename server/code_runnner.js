@@ -2,7 +2,7 @@ const { spawn } = require('child_process');
 const fs = require('fs');
 const tmp = require('tmp');
 
-exports.run_javascript = (text) => {
+exports.run_code = (language, text) => {
   const path = tmp.tmpNameSync();
   fs.writeFile(path, text, (err) => {
     if (err) {
@@ -10,5 +10,10 @@ exports.run_javascript = (text) => {
     }
     console.log(`File ${path} created.`);
   });
-  return spawn('node', [path]);
+
+  if (language === 'javascript') {
+    return spawn('node', [path]);
+  } else if (language === 'python') {
+    return spawn('python3', [path]);
+  }
 };

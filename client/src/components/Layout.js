@@ -137,7 +137,7 @@ class Layout extends Component {
           </Navbar>
         </Top>
         <Left>
-          <CodeEditor mode='javascript' />
+          <CodeEditor />
         </Left>
         <RightTop>
             {this.state.isVideoChatOpen ? (
