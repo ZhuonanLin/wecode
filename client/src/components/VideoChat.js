@@ -62,7 +62,7 @@ class VideoChat extends Component {
   render() {
     return (
       <StyledVideoChat>
-        <Video id='video-me'></Video>
+        <Video id='video-me' muted></Video>
         <Video id='video-you'></Video>
       </StyledVideoChat>
     );
