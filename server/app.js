@@ -67,16 +67,21 @@ app.get('/api/check', (req, res) => {
   res.send(`Server is connected on port ${port}.`)
 });
 
-const code_default = `console.log('Hello World!');`;
+const code_default = 
+{ 
+  javascript: "console.log('Hello World!');",
+  python: "print('Hello world)"
+}
 let code_cache = code_default;
 let connected_peers = new Set();
 
 io.on('connection', (socket) => {
   io.emit('server message', `socket ${socket.id} connected`);
 
-  socket.on('run request', text => {
+  socket.on('run request', (language, text) => {
     io.emit('server message', `code submitted by ${socket.id}`);
-    const proc = code_runner.run_javascript(text);
+    const proc = code_runner.run_code(language, text);
+    
     io.emit('server message', 'process started');
 
     proc.stdout.on('data', (data) => {
@@ -93,18 +98,18 @@ io.on('connection', (socket) => {
   });
 
   socket.on('request code', () => {
-    socket.emit('edit', code_cache);
+    socket.emit('edit', code_cache[language]);
   });
 
-  socket.on('clear', () => {
-    code_cache = code_default;
-    io.emit('edit', code_cache);
+  socket.on('clear', language => {
+    code_cache[language] = code_default[language];
+    io.emit('edit', language, code_cache[language]);
     io.emit('server message', `code cleared by ${socket.id}`);
   });
 
-  socket.on('edit', code => {
-    code_cache = code;
-    socket.broadcast.emit('edit', code_cache);
+  socket.on('edit', (language, code) => {
+    code_cache[language] = code;
+    socket.broadcast.emit('edit', language, code_cache[language]);
   });
 
   socket.on('peer open', peer_id => {

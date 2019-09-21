@@ -6,7 +6,7 @@ const StyledConsole = styled.div`
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: 1fr 2.5rem;
   grid-template-areas:
     "top"
     "bottom";
