@@ -7,7 +7,7 @@ const ExpressPeerServer = require('peer').ExpressPeerServer;
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
-const peerserver = ExpressPeerServer(server, {});
+const peerserver = ExpressPeerServer(server, { debug: true });
 const port = process.env.PORT || 3001;
 
 const code_runner = require('./code_runnner');
@@ -64,6 +64,10 @@ let connected_peers = new Set();
 
 io.on('connection', (socket) => {
   io.emit('server message', `socket ${socket.id} connected`);
+
+  socket.on('chat window ready', () => {
+    socket.emit('peer create', port);
+  });
 
   socket.on('run request', text => {
     io.emit('server message', `code submitted by ${socket.id}`);
@@ -131,6 +135,11 @@ if (process.env.NODE_ENV === 'production') {
   });
 
   // Set up proxy
+  app.use(proxy('/peerjs', {
+    target: `http://localhost:${port}`,
+    changeOrigin: true,
+    ws: true,
+  }));
   app.use(proxy({
     target: `http://localhost:${port}`,
     changeOrigin: true,
