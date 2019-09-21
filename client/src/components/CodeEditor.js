@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Controlled as CodeMirror} from 'react-codemirror2';
-import { Button } from 'reactstrap';
+import { Button, ButtonGroup } from 'reactstrap';
 import styled from 'styled-components';
 
 import { socket } from './App';
@@ -72,13 +72,15 @@ class CodeEditor extends Component {
             }}
           />
         </Top>
-        <Bottom className="flex-row justify-content-end">
-          <Button className="mr-1" color="danger" onClick={this.clear}>Clear</Button>
-          <Button color="primary" onClick={() => {
-            socket.emit('run request', this.state.value);
-          }}>
-            Run
-          </Button>
+        <Bottom>
+          <div className="d-flex flex-row justify-content-end">
+            <Button className="mr-1" color="danger" onClick={this.clear}>Clear</Button>
+            <Button color="primary" onClick={() => {
+              socket.emit('run request', this.state.value);
+            }}>
+              Run
+            </Button>
+          </div>
         </Bottom>
       </StyledCodeEditor>
     );

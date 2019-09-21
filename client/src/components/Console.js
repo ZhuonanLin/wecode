@@ -55,7 +55,9 @@ class Console extends Component {
           />
         </Top>
         <Bottom>
-          <Button onClick={this.clearConcole}>Clear Concole</Button>
+          <div className="d-flex flex-row justify-content-end">
+            <Button onClick={this.clearConcole}>Clear Concole</Button>
+          </div>
         </Bottom>
       </StyledConsole>
     );
