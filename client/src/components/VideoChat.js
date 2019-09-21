@@ -32,6 +32,8 @@ class VideoChat extends Component {
         this.stream = stream;
       });
 
+    console.log('WebRTC peer: ', peer);
+
     peer.on('open', (peer_id)=> {
       socket.emit('peer open', peer_id);
     });

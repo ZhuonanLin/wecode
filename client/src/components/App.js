@@ -13,7 +13,7 @@ import Peer from 'peerjs';
 export const socket = io();
 export const peer = new Peer({
   host: 'localhost',
-  port: process.env.PORT || 3001,
+  port: process.env.REACT_APP_PORT || 3001,
   path: '/peerjs'
 });
 
