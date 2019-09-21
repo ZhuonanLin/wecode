@@ -7,15 +7,9 @@ import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Footer from './Footer';
 
-// Set up all the connections
+// Set socket
 import io from 'socket.io-client';
-import Peer from 'peerjs';
 export const socket = io();
-export const peer = new Peer({
-  host: 'localhost',
-  port: process.env.REACT_APP_PORT || 3001,
-  path: '/peerjs'
-});
 
 const StyledJumbotron = styled(Jumbotron)`
   height: 100vh;
