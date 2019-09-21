@@ -50,7 +50,8 @@ class Layout extends Component {
     super(props);
     this.state = {
       messages: 'Welcome to WeCode!\n',
-      isOpen: false
+      isOpen: false,
+      isVedioChatOpen: false
     };
   }
 
@@ -91,6 +92,13 @@ class Layout extends Component {
     });
   }
 
+  toggleVedioChat = () => {
+    this.setState({
+      isVedioChatOpen: 
+        !this.state.isVedioChatOpen
+    });
+  }
+
   render() {
     console.log(this.state.isOpen);
     return (
@@ -102,6 +110,13 @@ class Layout extends Component {
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" navbar>
                 <NavItem>
+                  {this.state.isVedioChatOpen ? (
+                    <Button onClick={this.toggleVedioChat} color="danger">End Video Chat</Button>
+                  ) : (
+                    <Button onClick={this.toggleVedioChat} color="warning">Begin Video Chat</Button>
+                  )}
+                </NavItem>
+                <NavItem className="ml-3">
                   <Button onClick={this.openModal} color="primary">Send Invitation</Button>
                 </NavItem>
               </Nav>
@@ -112,7 +127,11 @@ class Layout extends Component {
           <CodeEditor mode='javascript' />
         </Left>
         <RightTop>
-          <VideoChat />
+            {this.state.isVedioChatOpen ? (
+              <VideoChat />
+            ) : (
+              null
+            )}
         </RightTop>
         <RightBottom>
           <Console messages={this.state.messages} />
