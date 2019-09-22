@@ -41,8 +41,8 @@ class CodeEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      javascriptValue: "console.log('Hello, world!');",
-      pythonValue: "print('Hello, world')",
+      javascriptValue: null,
+      pythonValue: null,
       language: 'javascript'
     };
   }
@@ -52,13 +52,14 @@ class CodeEditor extends Component {
     'python': { value: 'python', label: 'Python3' }
   };
 
-
   clear = () => {
     socket.emit('clear', this.state.language);
   };
 
   componentDidMount() {
-    socket.emit('request code', this.state.language);
+    for (let language of ['javascript', 'python']) {
+      socket.emit('request code', language);
+    };
 
     socket.on('edit', (language, value) => {
       if (language === 'javascript') {
@@ -85,7 +86,7 @@ class CodeEditor extends Component {
               this.setState({ javascriptValue: value });
             }}
             onChange={(editor, data, value) => {
-              socket.emit('edit', value);
+              socket.emit('edit', this.state.language,value);
             }}
           />
           ) : (
@@ -100,7 +101,7 @@ class CodeEditor extends Component {
               this.setState({ pythonValue: value });
             }}
             onChange={(editor, data, value) => {
-              socket.emit('edit', value);
+              socket.emit('edit', this.state.language,value);
             }}
           />
 
@@ -108,7 +109,7 @@ class CodeEditor extends Component {
         </Top>
         <Bottom>
           <div className='d-flex flex-row bd-highlight'>
-            <span className="align-self-center">Program Language:</span>
+            <span className="align-self-center">Programing Language:</span>
             <span className="mr-auto col-3">
             <Select
               menuPlacement="top"
@@ -131,7 +132,7 @@ class CodeEditor extends Component {
               if (this.state.language === 'javascript') {
                 socket.emit('run request', this.state.language, this.state.javascriptValue);
               } else if (this.state.language === 'python') {
-                socket.emit('run request', this.state.language, this.state.pythonValue);   
+                socket.emit('run request', this.state.language, this.state.pythonValue);
               }
             }}>
               Run

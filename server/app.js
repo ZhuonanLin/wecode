@@ -60,9 +60,9 @@ app.get('/api/check', (req, res) => {
 
 const code_default = {
   javascript: "console.log('Hello World!');",
-  python: "print('Hello world)"
+  python: "print('Hello World!')"
 }
-let code_cache = code_default;
+let code_cache = Object.assign({}, code_default);
 let connected_peers = new Set();
 
 io.on('connection', (socket) => {
@@ -91,8 +91,8 @@ io.on('connection', (socket) => {
     });
   });
 
-  socket.on('request code', (language) => {
-    socket.emit('edit', code_cache[language]);
+  socket.on('request code', language => {
+    socket.emit('edit', language, code_cache[language]);
   });
 
   socket.on('clear', language => {
