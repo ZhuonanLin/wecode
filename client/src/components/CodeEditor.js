@@ -58,10 +58,14 @@ class CodeEditor extends Component {
   };
 
   componentDidMount() {
-    socket.emit('request code');
+    socket.emit('request code', this.state.language);
 
-    socket.on('edit', this.state.language, value => {
-      this.setState({value});
+    socket.on('edit', (language, value) => {
+      if (language === 'javascript') {
+        this.setState({javascriptValue: value});
+      } else if (language === 'python') {
+        this.setState({pythonValue: value});
+      };
     });
   }
 

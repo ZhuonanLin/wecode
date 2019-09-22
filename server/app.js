@@ -58,8 +58,7 @@ app.get('/api/check', (req, res) => {
   res.send(`Server is connected on port ${port}.`);
 });
 
-const code_default = 
-{ 
+const code_default = {
   javascript: "console.log('Hello World!');",
   python: "print('Hello world)"
 }
@@ -92,7 +91,7 @@ io.on('connection', (socket) => {
     });
   });
 
-  socket.on('request code', () => {
+  socket.on('request code', (language) => {
     socket.emit('edit', code_cache[language]);
   });
 
@@ -141,11 +140,6 @@ if (process.env.NODE_ENV === 'production') {
 
   // Set up proxy
   app.use(proxy('/peerjs', {
-    target: `http://localhost:${port}`,
-    changeOrigin: true,
-    ws: true,
-  }));
-  app.use(proxy({
     target: `http://localhost:${port}`,
     changeOrigin: true,
     ws: true,
