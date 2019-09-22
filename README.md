@@ -2,7 +2,12 @@
 
 ## Development
 
-To start the server and client concurrently:
+To start in development mode:
 ```console
 $ npm start
+```
+
+To test production deployment on Heroku:
+```console
+$ npm run heroku-test
 ```
