@@ -37,7 +37,8 @@ class VideoChat extends Component {
 
     socket.on('peer create', (port) => {
       const peer = new Peer({
-        host: process.env.HEROKU_HOST || 'localhost',
+        // host: process.env.HEROKU_HOST || 'localhost',
+        host: 'demo-wecode.herokuapp.com',
         port: port,
         path: '/peerjs'
       });
