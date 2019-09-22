@@ -55,7 +55,7 @@ app.post('/send-invitation-email', (req, res, next) => {
 });
 
 app.get('/api/check', (req, res) => {
-  res.send(`Server is connected on port ${port}.`);
+  res.send(`Express server is running on port ${port}.`);
 });
 
 const code_default = {
@@ -76,7 +76,7 @@ io.on('connection', (socket) => {
     io.emit('server message', `code submitted by ${socket.id}`);
     const proc = code_runner.run_code(language, text);
 
-    io.emit('server message', 'process started');
+    io.emit('console output', '-----> starting process\n\n');
 
     proc.stdout.on('data', (data) => {
       io.emit('console output', data.toString());
@@ -87,7 +87,7 @@ io.on('connection', (socket) => {
     });
 
     proc.on('close', (code) => {
-      io.emit('server message', `process exited with ${code}`);
+      io.emit('console output', `\n-----> process exited with ${code}\n`);
     });
   });
 
